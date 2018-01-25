@@ -6,8 +6,9 @@ var rename = require('gulp-rename');
 var replace = require('gulp-replace');
 var gulpif = require('gulp-if');
 var concatCss = require('gulp-concat-css');
+var format = require('string-format');
 
-var version = "-v0.7";
+var version = "0.6";
 
 var sass_src = [
     'lib/sass/build-calcite-maps-bootstrap.scss',
@@ -29,11 +30,11 @@ var copy_src = [
 ];
 
 var minifycss_src = [
-    {dest: 'dist/css/calcite-maps.min-v0.7.css' , src: ['dist/css/calcite-maps-v0.7.css']},
-    {dest: 'dist/css/calcite-maps-bootstrap.min-v0.7.css' , src: ['dist/css/calcite-maps-bootstrap-v0.7.css']},
-    {dest: 'dist/css/calcite-maps-arcgis-3.x.min-v0.7.css' , src: ['dist/css/calcite-maps-v0.7.css', 'dist/css/layouts/inline-zoom-v0.7.css', 'dist/css/layouts/large-title-v0.7.css', 'dist/css/layouts/small-title-v0.7.css', 'dist/css/support/arcgis-3.x-v0.7.css']},
-    {dest: 'dist/css/calcite-maps-arcgis-4.x.min-v0.7.css' , src: ['dist/css/calcite-maps-v0.7.css', 'dist/css/layouts/inline-zoom-v0.7.css', 'dist/css/layouts/large-title-v0.7.css', 'dist/css/layouts/small-title-v0.7.css','dist/css/support/arcgis-4.x-v0.7.css']},
-    {dest: 'dist/css/calcite-maps-esri-leaflet.min-v0.7.css' , src: ['dist/css/calcite-maps-v0.7.css', 'dist/css/layouts/inline-zoom-v0.7.css', 'dist/css/layouts/large-title-v0.7.css', 'dist/css/layouts/small-title-v0.7.css', 'dist/css/support/esri-leaflet-v0.7.css']}
+    {dest: format('dist/css/calcite-maps.min-v{}.css', version) , src: [format('dist/css/calcite-maps-v{}.css', version)]},
+    {dest: format('dist/css/calcite-maps-bootstrap.min-v{}.css', version) , src: [format('dist/css/calcite-maps-bootstrap-v{}.css', version)]},
+    {dest: format('dist/css/calcite-maps-arcgis-3.x.min-v{}.css', version) , src: [format('dist/css/calcite-maps-v{}.css', version), format('dist/css/layouts/inline-zoom-v{}.css', version), format('dist/css/layouts/large-title-v{}.css', version), format('dist/css/layouts/small-title-v{}.css', version), format('dist/css/support/arcgis-3.x-v{}.css', version)]},
+    {dest: format('dist/css/calcite-maps-arcgis-4.x.min-v{}.css', version) , src: [format('dist/css/calcite-maps-v{}.css', version), format('dist/css/layouts/inline-zoom-v{}.css', version), format('dist/css/layouts/large-title-v{}.css', version), format('dist/css/layouts/small-title-v{}.css', version),format('dist/css/support/arcgis-4.x-v{}.css', version)]},
+    {dest: format('dist/css/calcite-maps-esri-leaflet.min-v{}.css', version) , src: [format('dist/css/calcite-maps-v{}.css', version), format('dist/css/layouts/inline-zoom-v{}.css', version), format('dist/css/layouts/large-title-v{}.css', version), format('dist/css/layouts/small-title-v{}.css', version), format('dist/css/support/esri-leaflet-v{}.css', version)]}
 ];
 
 // Javascript banner
@@ -55,23 +56,11 @@ gulp.task('sass', function () {
     return gulp.src(sass_src, {base: './lib/sass'})
         .pipe(sass({includePaths: ['./node_modules/bootstrap-sass/assets/stylesheets']}))
         .pipe(rename(function (path) {
-          path.basename = path.basename.replace('build-', '') + version;
+          path.basename = path.basename.replace('build-', '') + '-v' + version;
         }))
         .pipe(gulp.dest('dist/css'));
       
 });
-
-// gulp.task('minify-css', ['sass'], function () {
-//     return gulp.src('dist/css/*.css')
-//         .pipe(minifycss())
-//         .pipe(rename(function (path) {
-//             path.basename = path.basename.replace(version, ".min" + version)
-//           }))
-//         .pipe(gulp.dest('dist/css'));
-      
-// });
-
-
 
 gulp.task('minify-css', ['sass'], function () {
 
@@ -88,7 +77,7 @@ gulp.task('copy-and-rename', function () {
     copy_rename_src.forEach(function(copy) {
         gulp.src(copy.src)
         .pipe(rename(function (path) {
-            path.basename += version;
+            path.basename += '-v' + version;
           }))
         .pipe(gulp.dest(copy.dest));
     });
