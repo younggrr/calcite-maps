@@ -33,3 +33,7 @@ bower_components
 
 # Optional REPL history
 .node_repl_history
+dist/js/dojo/calcitemaps-prev-v0.6.js
+lib/js/dojo/calcitemaps-prev.js
+package-lock.json
+.vscode/
