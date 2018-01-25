@@ -7,6 +7,7 @@ var replace = require('gulp-replace');
 var gulpif = require('gulp-if');
 var concatCss = require('gulp-concat-css');
 var format = require('string-format');
+var shell = require('gulp-shell');
 
 var version = "0.6";
 
@@ -90,6 +91,12 @@ gulp.task('copy-direct', function () {
         gulp.src(copy.src)
         .pipe(gulp.dest(copy.dest));
     });
+
+});
+
+gulp.task('update-packages', function () {
+
+    shell.task('npm install --update')
 
 });
 
